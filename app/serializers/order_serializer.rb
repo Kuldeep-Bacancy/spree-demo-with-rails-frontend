@@ -35,7 +35,7 @@ class OrderSerializer
 
   attribute :line_items do |obj|
     obj.line_items.map do |li|
-      { id: li.id, quantity: li.quantity, currency: li.currency, tax_category: li.tax_category&.name, price: li.price, pre_tax_amount: li.pre_tax_amount }
+      { id: li.id, name: li.variant&.product&.name, quantity: li.quantity, currency: li.currency, tax_category: li.tax_category&.name, price: li.price, pre_tax_amount: li.pre_tax_amount }
     end
   end
 end

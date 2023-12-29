@@ -16,4 +16,11 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  Spree::Core::Engine.add_routes do
+    namespace :admin do
+      post :import_products
+      get :export_products, constraints: { format: 'csv' }
+    end
+  end
 end

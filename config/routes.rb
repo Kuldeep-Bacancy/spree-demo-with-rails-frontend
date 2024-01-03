@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   #
   # We ask that you don't use the :as option here, as Spree relies on it being
   # the default of "spree".
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
   mount Spree::Core::Engine, at: '/'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -22,5 +24,11 @@ Rails.application.routes.draw do
       post :import_products
       get :export_products, constraints: { format: 'csv' }
     end
+  end
+
+  Spree::Core::Engine.routes.draw do
+    get "/admin/products/upload", to: "admin/products#upload"
+    get "/admin/products/upload_status", to: "admin/products#upload_status"
+    post "/admin/products/process_upload", to: "admin/products#process_upload"
   end
 end

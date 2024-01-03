@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_14_052524) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_03_033227) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,6 +59,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_052524) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "file_uploads", force: :cascade do |t|
+    t.string "file_name"
+    t.string "file_type"
+    t.string "state", default: "pending", null: false
+    t.bigint "creator_id"
+    t.text "error_data"
+    t.jsonb "metadata", default: {}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_file_uploads_on_creator_id"
   end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
@@ -1612,6 +1624,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_14_052524) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "file_uploads", "spree_users", column: "creator_id"
   add_foreign_key "spree_oauth_access_grants", "spree_oauth_applications", column: "application_id"
   add_foreign_key "spree_oauth_access_tokens", "spree_oauth_applications", column: "application_id"
   add_foreign_key "spree_option_type_translations", "spree_option_types"
